@@ -6,8 +6,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    {% if title%}
+    <title>Fitness app- {{title}}</title>
+    {%else%}
     <title>Fitness app</title>
+    {% endif%}
   </head>
   <body>
         <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #e3f2fd;">
@@ -29,18 +32,38 @@
                     </li>
                   </ul>
                  <ul class="navbar-nav">
-                        <li class="nav-item">
-                                <a class="nav-link" href="#">Sign </a>
-                         </li>
-                         
-                         <li class="nav-item">
-                                <a class="nav-link" href="#">Sign Up</a>
-                        </li>
-                     
+                     {%if user.is_authenticated%}
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user-profile'%}">Profile </a>
+              
+                          </li>      
+                          <li class="nav-item">
+                              <a class="nav-link" href="{% url 'user-logout'%}">Logout</a>
+                    
+                      </li> 
+                      
+                     {% endif%}
+
+                     {% if user.is_anonymous %}
+                          <li class="nav-item">
+                              <a class="nav-link" href="{% url 'user-login'%}">Sign in </a>
+                          </li>
+                      
+                          <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'user-register'%}">Sign Up</a>
+                          </li>
+                    {% endif%}     
                  </ul>
                 </div>
               </nav>
     <div class="container">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{message.tags}}">
+            {{message}}
+          </div>
+          {% endfor %}
+        {% endif%}
             
         {% block content%}{% endblock content %}
     </div>
